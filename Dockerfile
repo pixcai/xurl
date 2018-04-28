@@ -1,5 +1,6 @@
 FROM alpine:latest
-MAINTAINER pixcai "pixcai@163.com"
-COPY xurl /usr/bin/
+LABEL maintainer="pixcai<pixcai@163.com>" version="0.1"
+RUN mkdir -p /go/bin
+COPY xurl /go/bin
 EXPOSE 9900
-ENTRYPOINT ["xurl"]
+ENTRYPOINT ["/go/bin/xurl"]

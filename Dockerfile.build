@@ -1,0 +1,6 @@
+FROM golang:alpine
+LABEL maintainer="pixcai<pixcai@163.com>" version="0.1"
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.7/main" > /etc/apk/repositories
+RUN apk add --update bash && rm -rf /var/cache/apk/*
+WORKDIR /go/src/xurl
+CMD go build -o xurl src/main.go src/routes.go src/xurl.go
