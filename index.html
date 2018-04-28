@@ -73,6 +73,9 @@
   #result {
     margin: 1.5em 0 0 0;
   }
+  .error {
+    color: #c00;
+  }
   </style>
 </head>
 <body>
@@ -82,7 +85,7 @@
         <div class="col-xs-10 col-sm-8 col-md-6">
           <input type="text" name="url" placeholder="请输入网址">
         </div>
-        <div class="col-xs-12 col-sm-2 col-md-1 end-xs">
+        <div class="col-xs-12 col-sm-2 col-md-1 center-xs end-sm">
           <button id="submit">生成</button>
         </div>
       </form>
@@ -106,11 +109,10 @@
       const origin = location.origin;
 
       $.post(origin, data, function (data) {
-        console.log(typeof data, data)
         if (data.message === 'OK') {
-          $("#result").html(origin + '/' + data.hash);
+          $("#result").html(`${origin}/${data.hash}`);
         } else {
-          $("#result").html(data.message);
+          $("#result").html(`<span class="error">${data.message}</span>`);
         }
       });
     });
