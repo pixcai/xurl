@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 )
 
@@ -17,6 +18,10 @@ type Response struct {
 var Redis *redis.Client
 
 func init() {
+	RedisAddr := os.Getenv("XURL_REDIS_URL")
+	if len(RedisAddr) == 0 {
+		RedisAddr = "localhost:6379"
+	}
 	Redis = redis.NewClient(&redis.Options{
 		Addr: RedisAddr,
 	})
