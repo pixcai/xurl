@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <title>短网址生成/还原</title>
+  <link href="https://cdn.bootcss.com/flexboxgrid/6.3.1/flexboxgrid.min.css" rel="stylesheet">
+  <style>
+  html, body {
+    height: 100%;
+  }
+  body {
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 0;
+    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524913748410&di=c315a4c702d99878e31e0931143b4397&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2Fday_120223%2F12022315459ea0433680e3ed26.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left top;
+  }
+  .root {
+    padding-top: 8em;
+  }
+  input, .block, .tip {
+    padding: .6em 1em;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+  }
+  input, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+  }
+  input {
+    margin-bottom: 1em;
+    width: 100%;
+  }
+  button {
+    padding: .8em 1.6em;
+    color: white;
+    background: #209cee;
+    line-height: 1em;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .is-decode {
+    background: #00d1b2;
+  }
+  .block {
+    position: relative;
+    color: #515151;
+    margin-top: 4em;
+    padding: 1em;
+    overflow: hidden;
+    text-align: left;
+    background: white;
+    border-radius: 4px;
+  }
+  .tip {
+    position: absolute;
+    font-size: .6em;
+    top: -2px;
+    left: -2px;
+    padding: .5em 1.5em;
+    background: #eee;
+    border-top: none;
+    border-left: none;
+  }
+  #result {
+    margin: 1.5em 0 0 0;
+  }
+  </style>
+</head>
+<body>
+  <div class="row root">
+    <div class="col-xs-12">
+      <form class="row center-xs" onsubmit="return false;">
+        <div class="col-xs-10 col-md-6">
+          <input type="text" name="url" placeholder="请输入网址">
+        </div>
+        <div class="col-xs-12 col-md-1 end-xs">
+          <button id="submit">生成</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-12">
+      <div class="row center-xs">
+        <div class="col-xs-10 col-md-7">
+          <div class="block">
+            <span class="tip">结&nbsp;果</span>
+            <p id="result">暂无结果</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+  <script>
+  $(function () {
+    $('#submit').on('click', function () {
+      const data = $('form').serialize();
+
+      $.post(location.origin, data, function (data) {
+        $("#result").html(data);
+      });
+    });
+  });
+  </script>
+</body>
+</html>
