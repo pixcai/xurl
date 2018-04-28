@@ -1,12 +1,18 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/go-redis/redis"
 	"log"
 	"net/http"
 	"net/url"
 	"time"
 )
+
+type Response struct {
+	Message string `json:"message"`
+	Hash    string `json:"hash"`
+}
 
 var Redis *redis.Client
 
@@ -22,31 +28,45 @@ func init() {
 func Index(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
+		w.Header().Set("Content-Type", "application/json;charset=utf-8")
 
-		originUrl, err := url.ParseRequestURI(r.FormValue("url"))
-		if err != nil {
-			w.Write([]byte("网址格式错误"))
+		originUrl := r.FormValue("url")
+		if _, err := url.ParseRequestURI(originUrl); err != nil {
+			res, _ := json.Marshal(Response{
+				Message: "网址格式错误",
+			})
+			w.Write(res)
 			return
 		}
 
-		hashs, err := Transform(originUrl.String())
+		hashs, err := Transform(originUrl)
 		if err != nil {
-			w.Write([]byte("无法压缩网址"))
+			res, _ := json.Marshal(Response{
+				Message: "无法压缩网址",
+			})
+			w.Write(res)
 			return
 		}
 
 		now := time.Now()
 		hash := hashs[0]
 		value := make(map[string]interface{})
-		value["longUrl"] = originUrl.String()
+		value["longUrl"] = originUrl
 		value["createdAt"] = now
 
 		if status := Redis.HMSet(hash, value); status.Err() != nil {
-			w.Write([]byte("服务器内部错误"))
+			res, _ := json.Marshal(Response{
+				Message: "服务器内部错误",
+			})
+			w.Write(res)
 			return
 		}
 		Redis.ExpireAt(hash, now.Add(72*time.Hour))
-		w.Write([]byte(OriginUrl + hash))
+		res, _ := json.Marshal(Response{
+			Message: "OK",
+			Hash:    hash,
+		})
+		w.Write(res)
 	} else {
 		http.ServeFile(w, r, "index.html")
 	}

@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	OriginUrl  = "http://xurl.pixcai.com/"
 	ServerAddr = ":7000"
 	RedisAddr  = "localhost:6379"
 )
