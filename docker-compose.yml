@@ -1,0 +1,25 @@
+version: "3"
+services:
+  xurl:
+    image: xurl
+    container_name: xurl
+    build: .
+    depends_on:
+      - redis
+    environment:
+      - XURL_REDIS_URL=redis:6379
+    ports:
+      - "9900:9900"
+
+  xurl_build:
+    image: xurl:build
+    container_name: xurl_build
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    volumes:
+      - $GOPATH/src:/go/src
+
+  redis:
+    image: redis
+    container_name: redis
